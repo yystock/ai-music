@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import "./Song.css";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface SongProps {
   songName: string;
@@ -29,7 +30,7 @@ function Song({ songName, songImg, songArtist }: SongProps) {
   return (
     <motion.div className="Song" variants={popUp} initial="in" animate="anim" exit="out">
       <div className="song-img">
-        <img src={songImg || ""} alt="" />
+        <Image src={songImg || ""} alt="" />
       </div>
       <div className="song-info">
         <h1 className="song-name text-white text-xl">{songName}</h1>

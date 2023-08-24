@@ -35,7 +35,7 @@ const testimonials = [
 
 export const LandingContent = () => {
   return (
-    <div className="relative flex flex-col px-10 pt-28 pb-44 min-h-screen dark:from-pink-950 dark:via-purple-950 dark:to-indigo-950 bg-gradient-to-b from-pink-100 via-purple-50 to-indigo-50  border-b-[2px] border-solid border-black">
+    <div className="relative flex flex-col px-10 pt-28 pb-44 min-h-screen dark:from-pink-950 dark:via-purple-950 dark:to-indigo-950 bg-gradient-to-b from-pink-100 via-purple-50 to-indigo-50 border-b-[2px] border-solid border-black">
       <h2 className="text-center text-4xl dark:text-white font-extrabold mb-20">Testimonials</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <AnimatePresence mode="sync" initial={false}>
@@ -54,19 +54,19 @@ export const LandingContent = () => {
             >
               <Card
                 className={cn(
-                  "relative group cursor-pointer transition-shadow overflow-hidden border-none bg-blend-luminosity hover:shadow-xl hover:shadow-purple-300 "
+                  "relative group cursor-pointer transition-shadow overflow-hidden border-none bg-blend-luminosity hover:shadow-xl hover:shadow-purple-300"
                 )}
               >
-                <div className="absolute inset-0 z-10 group-hover:bg-indigo-800/90  dark:group-hover:bg-indigo-900/90 items-center flex flex-col translate-y-[60%] justify-center px-9 text-center transition-all duration-700 group-hover:translate-y-0">
+                <div className="absolute inset-0 z-10 group-hover:bg-indigo-800/90 dark:group-hover:bg-indigo-900/90 items-center flex flex-col translate-y-[60%] justify-center px-9 text-center transition-all duration-700 group-hover:translate-y-0">
                   <p className="mb-3 text-lg italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    "{item.description}"
+                    -{item.description}-
                   </p>
                 </div>
                 <CardHeader>
                   <CardTitle className="flex items-center justify-center">
                     <div className="text-center">
                       <p className="text-lg">{item.name}</p>
-                      <p className="text-zinc-400 text-sm">"{item.title}"</p>
+                      <p className="text-zinc-400 text-sm">-{item.title}-</p>
                     </div>
                   </CardTitle>
                   <CardContent className={cn("pt-4 px-0 items-center mx-auto")}>

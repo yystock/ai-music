@@ -109,7 +109,7 @@ function TopFiveSongs({ data, id, message }: TopFiveSongsProps) {
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [data]);
 
   const getSong = (number: number) => {
     return <Song songName={songs[number].name} songImg={songs[number].imageUrl} songArtist={songs[number].artist} />;
