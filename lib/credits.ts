@@ -2,8 +2,8 @@ import { auth, currentUser } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
-export const decrementCredits = async () => {
-  const { userId } = auth();
+export const decrementCredits = async (id: string) => {
+  const { userId } = id ? { userId: id } : auth();
 
   if (!userId) {
     return;
@@ -21,8 +21,8 @@ export const decrementCredits = async () => {
   }
 };
 
-export const checkCredits = async () => {
-  const { userId } = auth();
+export const checkCredits = async (id: string) => {
+  const { userId } = id ? { userId: id } : auth();
   const user = await currentUser();
   if (!userId || !user) {
     return false;
@@ -32,7 +32,6 @@ export const checkCredits = async () => {
     where: { userId: userId },
   });
   if (!userdb) {
-    console.log("creating user");
     await prismadb.user.create({
       data: {
         userId: userId,
@@ -49,9 +48,8 @@ export const checkCredits = async () => {
   }
 };
 
-export const getCreditsCount = async () => {
-  const { userId } = auth();
-
+export const getCreditsCount = async (id: string) => {
+  const { userId } = id ? { userId: id } : auth();
   if (!userId) {
     return 0;
   }

@@ -2,11 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Providers } from "@/providers/next-ui-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { cn } from "@/lib/utils";
 import QueryProvider from "@/providers/query-provider";
 import { Toaster } from "react-hot-toast";
+import { ModalProvider } from "@/providers/modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeProvider attribute="class" defaultTheme="dark">
             <QueryProvider>
               <Toaster />
+              <ModalProvider />
               {children}
             </QueryProvider>
           </ThemeProvider>

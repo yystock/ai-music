@@ -6,11 +6,11 @@
 
 #### Features
 
-- [ ] Clerk Auth
-- [ ] Stripe
-- [ ] Spotify API
-- [ ] OpenAI
-- [ ] Replicate API
-- [ ] React Query Search Box With Dynamic Results
-- [ ] React Email
-- [ ] Some Custom UI Components
+- [x] Clerk Auth
+- [x] Stripe
+- [x] Spotify API
+- [x] OpenAI
+- [x] Replicate API
+- [x] React Query Search Box With Dynamic Results
+- [x] React Email
+- [x] Some Custom UI Components

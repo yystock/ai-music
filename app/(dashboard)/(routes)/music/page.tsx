@@ -1,15 +1,12 @@
-"use client";
-
-import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-
 import { SongForm } from "@/components/song-form";
-export default function HomePage() {
-  const router = useRouter();
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "MusiCat | Music",
+  description: "Create your own music with AI.",
+};
+
+export default function HomePage() {
   return (
     <div>
       <div className="mb-12 space-y-4">

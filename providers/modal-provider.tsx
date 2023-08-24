@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { StripeModal } from "@/components/stripeModal";
+import { ContactModal } from "@/components/contactModal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -17,6 +18,7 @@ export const ModalProvider = () => {
   return (
     <>
       <StripeModal />
+      <ContactModal />
     </>
   );
 };

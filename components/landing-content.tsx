@@ -42,14 +42,14 @@ export const LandingContent = () => {
           {testimonials.map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, x: "-100%", filter: "blur(8px)" }}
+              initial={{ opacity: 0, x: "-100%", filter: "blur(5px)" }}
               whileInView={{
                 opacity: 1,
                 x: "0%",
                 filter: "blur(0px)",
                 transition: { type: "spring", stiffness: 100, duration: 0.3 * index, delay: index * 0.2 },
               }}
-              exit={{ opacity: 0, x: "100%", filter: "blur(8px)", transition: { duration: 0.2 } }}
+              exit={{ opacity: 0, x: "100%", transition: { duration: 0.2 } }}
               // transition={{ type: "spring", stiffness: 100, duration: index * 0.3, delay: index * 0.2 }}
             >
               <Card

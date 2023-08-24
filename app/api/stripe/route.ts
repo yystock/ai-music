@@ -7,6 +7,7 @@ import { absoluteUrl } from "@/lib/utils";
 
 const dashboardUrl = absoluteUrl("/dashboard");
 const homeUrl = absoluteUrl("/");
+const price_id = process.env.STRIPE_PRICE_KEY;
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -17,10 +18,10 @@ export async function GET(req: Request) {
     if (!userId || !user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    if (!price_id) {
+      return new NextResponse("Server Error", { status: 500 });
+    }
 
-    const prices = await stripe.prices.list({
-      lookup_keys: ["credits"],
-    });
     const stripeSession = await stripe.checkout.sessions.create({
       success_url: dashboardUrl,
       cancel_url: homeUrl,
@@ -31,13 +32,14 @@ export async function GET(req: Request) {
       customer_email: user.emailAddresses[0].emailAddress,
       line_items: [
         {
-          price: prices.data[0].id,
+          price: price_id,
           quantity: quantity ? parseInt(quantity) : 1,
         },
       ],
       metadata: {
         userId,
         email: user.emailAddresses[0].emailAddress,
+        quantity: quantity ? parseInt(quantity) : 1,
       },
     });
 

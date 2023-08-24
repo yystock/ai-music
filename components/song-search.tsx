@@ -9,8 +9,8 @@ import { useDebounce } from "@/hooks/useDebounce";
 import Image from "next/image";
 
 interface SongSearchProps {
-  handleSelect: (song: { name: string; artist: string }[]) => void;
-  getValues: { name: string; artist: string }[];
+  handleSelect: (song: { id: string; name: string; artist: string }[]) => void;
+  getValues: { id: string; name: string; artist: string }[];
 }
 
 export default function SongSerach({ handleSelect, getValues }: SongSearchProps) {
@@ -23,7 +23,7 @@ export default function SongSerach({ handleSelect, getValues }: SongSearchProps)
     queryFn: async () => {
       if (debouncedSearchTerm) {
         const { data } = await axios.get(`/api/search?q=${debouncedSearchTerm}`);
-        console.log(data.tracks);
+
         return data.tracks;
       }
       return null;
@@ -61,9 +61,9 @@ function SearchResult({
 }: {
   isLoading: boolean;
   data: any[];
-  handleSelect: (song: { name: string; artist: string }[]) => void;
+  handleSelect: (song: { id: string; name: string; artist: string }[]) => void;
   setSearch: (value: string) => void;
-  getValues: { name: string; artist: string }[];
+  getValues: { id: string; name: string; artist: string }[];
 }) {
   return (
     <div
@@ -77,7 +77,7 @@ function SearchResult({
           <div
             key={item.id}
             onClick={(e) => {
-              handleSelect([...getValues, { name: item.name, artist: item.artists[0].name }]);
+              handleSelect([...getValues, { id: item.id, name: item.name, artist: item.artists[0].name }]);
               setSearch("");
             }}
             className={cn(

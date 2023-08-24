@@ -13,7 +13,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(data);
   } catch (error) {
-    console.log("[SEARCH_ROUTE_ERROR]", error);
+    console.log("[STATUS_ROUTE_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

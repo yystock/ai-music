@@ -9,50 +9,50 @@ import { useForm } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Textarea } from "./ui/textarea";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAuth } from "@clerk/nextjs";
 import { Input } from "./ui/input";
 import SongSerach from "./song-search";
-import { useCallback } from "react";
 import { X } from "lucide-react";
-
-const formSchema = z.object({
-  source: z.enum(["AI", "Fantano", "M1"]),
-  songs: z.array(z.object({ name: z.string(), artist: z.string() })),
-  to: z.enum(["Web", "Email"]),
-  email: z.string().email({ message: "Invalid email." }),
-  request: z.string().min(2, {
-    message: "Request must be at least 2 characters.",
-  }),
-});
+import { useStripeModal } from "@/hooks/useStripeModal";
+import { formSchema } from "@/lib/type";
 
 export function SongForm() {
   // 1. Define your form.
   const router = useRouter();
   const { isSignedIn } = useAuth();
-
-  const handleSelect = useCallback((e: any) => {
-    console.log(e);
-  }, []);
+  const stripeModal = useStripeModal();
 
   const { mutate: makeRequest, isLoading } = useMutation({
     mutationFn: async (newRequest: z.infer<typeof formSchema>) => {
-      const { data } = await axios.post("/api/song", newRequest);
+      let api = "/api/song";
+      if (newRequest.task === "Music Generation") {
+        api = "/api/music";
+      }
+      const { data } = await axios.post(api, newRequest);
       return data;
     },
-    onError: (err) => {
-      console.log(err);
-      if (err === 401) {
-        console.log("Unauthorized");
+    onError: (err: any) => {
+      if (err?.response?.status === 401) {
+        toast.error("Unauthorized");
+      } else if (err?.response?.status === 403) {
+        toast.error("Not enough credits");
+        stripeModal.onOpen();
+      } else if (err?.response?.status === 500) {
+        toast.error("Server Error");
+        router.push("/dashboard");
+      } else if (err?.response?.status === 400) {
+        toast.error("Request Error");
+      } else {
+        toast.error("Error");
+        router.push("/dashboard");
       }
-
-      toast.error("Error");
     },
     onSuccess: (data) => {
-      router.push(`/dashboard/`);
+      router.push(`/yours/${data.id}`);
     },
   });
 
@@ -60,14 +60,16 @@ export function SongForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       source: "AI",
-      request: "",
+      request: "Please give me a list of songs similar to the selected below.",
       songs: [],
+      task: "Song Recommendations",
       to: "Web",
       email: "",
     },
   });
   const watch = form.watch("to");
   const watchSongs = form.watch("songs");
+  const task = form.watch("task");
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -75,15 +77,25 @@ export function SongForm() {
       router.push("/sign-in");
       return;
     }
+    if (values.to === "Email") {
+      toast.success("Request Sent");
+      toast.success("The results will be sent to the email address within 24 hours.");
+    }
+    if (values.to === "Web") {
+      toast.success("Request Sent");
+      toast.success("You will be redirected shortly.");
+    }
     makeRequest(values);
-    console.log(values);
   }
   // ...
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("flex flex-col space-y-8 w-1/2 px-20 pb-16")}>
-        <div className="flex justify-between">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("flex flex-col space-y-8 w-1/2 px-12 py-16 shadow-lg backdrop-blur-3xl backdrop-filter rounded-2xl bg-white/10")}
+      >
+        <div className="flex gap-3">
           <FormField
             control={form.control}
             name="source"
@@ -108,10 +120,33 @@ export function SongForm() {
           />
           <FormField
             control={form.control}
+            name="task"
+            render={({ field }) => (
+              <FormItem className="w-52">
+                <FormLabel></FormLabel>
+                <Select onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue defaultValue={"Song Recommendations"} placeholder="Song Recommendations" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Music Generation">Music Generation</SelectItem>
+                    <SelectItem value="Song Recommendations">Song Recommendations</SelectItem>
+                    <SelectItem value="Similar Songs">Similar Songs</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <span className="flex-grow"></span>
+          <FormField
+            control={form.control}
             name="to"
             render={({ field }) => (
-              <FormItem className="w-24">
-                <FormLabel></FormLabel>
+              <FormItem className="w-28 flex items-center gap-3 justify-center">
+                <FormLabel>To:</FormLabel>
                 <Select onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger>
@@ -152,7 +187,14 @@ export function SongForm() {
             <FormItem>
               <FormLabel></FormLabel>
               <FormControl>
-                <Textarea placeholder="Please give me a list of songs similar to the selected below." {...field} />
+                <Textarea
+                  placeholder={
+                    task === "Music Generation"
+                      ? "Please generate some music similar to:"
+                      : "Please give me a list of songs similar to the selected below:"
+                  }
+                  {...field}
+                />
               </FormControl>
 
               <FormMessage />

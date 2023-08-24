@@ -8,24 +8,40 @@ datasource db {
     relationMode = "prisma"
 }
 
+enum Status {
+    pending
+    completed
+    failed
+}
+
 model UserRequest {
     id        String   @id @default(cuid())
-    userId    String   @unique
+    userId    String
     email     String
+    task      String
     source    String
     to        String
     request   String
-    links     Song[]
+    songs     Song[]   @relation("RequestedSongs")
+    results   Song[]   @relation("ResultSongs")
+    result    String   @db.Text
+    status    Status   @default(pending)
     createdAt DateTime @default(now())
-    user      User     @relation(fields: [userId], references: [id])
+    user      User     @relation(fields: [userId], references: [userId])
+
+    @@index([id])
+    @@index([userId])
 }
 
 model Song {
-    id            String       @id @default(cuid())
-    name          String       @unique
-    artist        String
-    userRequestId String?
-    userRequest   UserRequest? @relation(fields: [userRequestId], references: [id])
+    songId      String        @id @default(cuid())
+    id          String
+    name        String
+    artist      String
+    imageUrl    String?
+    previewUrl  String?
+    requestedIn UserRequest[] @relation("RequestedSongs") // Relation 1
+    resultedIn  UserRequest[] @relation("ResultSongs")
 }
 
 enum Role {

@@ -16,7 +16,7 @@ export const LandingHero = () => {
           <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
             <TypewriterComponent
               options={{
-                strings: ["Similar Song Search.", "Music Recommendation.", "Playlist Generation.", "Music Review."],
+                strings: ["Music Generation.", "Similar Song Search.", "Playlist Generation.", "Music Recommendation."],
                 autoStart: true,
                 loop: true,
               }}
