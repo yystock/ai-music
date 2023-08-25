@@ -12,13 +12,25 @@ export const metadata: Metadata = {
 
 const SettingsPage = async () => {
   const user = await getUser();
-  if (!user) return null;
+  if (!user)
+    return (
+      <div>
+        <Heading title="Settings" description="Manage account settings." name="settings" />
+        <div className="px-4 lg:px-8 space-y-4">
+          <div className="text-sm">{"You are currently on a free plan."}</div>
+          <div className="flex gap-5 items-center w-full">
+            <p>You currently have </p>
+            <FreeCounter credits={5} />
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div>
       <Heading title="Settings" description="Manage account settings." name="settings" />
       <div className="px-4 lg:px-8 space-y-4">
-        <div className="text-muted-foreground text-sm">
+        <div className="text-sm">
           {user.role === "paid"
             ? `You are currently a Paid Member.`
             : user.role === "admin"

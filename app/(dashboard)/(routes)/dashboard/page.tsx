@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import type { Metadata } from "next";
+import { Heading } from "@/components/heading";
 
 export const metadata: Metadata = {
   title: "MusiCat | Dashboard",
@@ -25,8 +26,7 @@ export default async function DashboardPage() {
   return (
     <div>
       <div className="mb-8 space-y-4">
-        <h2 className="text-2xl md:text-4xl font-bold text-center">Explore the power of AI</h2>
-        <p className="text-muted-foreground font-light text-sm md:text-lg text-center">Chat with the smartest AI - Experience the power of AI</p>
+        <Heading title="Dashboard" description="Order History" name="layout-dashboard" />
       </div>
       <div className="px-4 md:px-20 lg:px-32 space-y-4">
         <div className="container mx-auto py-10">

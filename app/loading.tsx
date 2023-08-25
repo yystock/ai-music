@@ -1,5 +1,9 @@
-import { Skeleton } from "@/components/ui/skeleton";
-
+"use client";
+import { Spinner } from "@nextui-org/react";
 export default function Loading() {
-  return <Skeleton className="w-[100px] h-[20px] rounded-full" />;
+  return (
+    <div className="h-screen w-full justify-center items-center flex">
+      <Spinner color="secondary" />
+    </div>
+  );
 }
