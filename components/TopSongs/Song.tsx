@@ -10,6 +10,7 @@ interface SongProps {
   songArtist: string;
 }
 function Song({ songName, songImg, songArtist }: SongProps) {
+  console.log(songImg);
   const popUp = {
     in: { y: "200%" },
     anim: {
@@ -29,8 +30,8 @@ function Song({ songName, songImg, songArtist }: SongProps) {
 
   return (
     <motion.div className="Song" variants={popUp} initial="in" animate="anim" exit="out">
-      <div className="song-img">
-        <Image src={songImg || ""} alt="" />
+      <div className="song-img ">
+        <Image src={songImg || ""} alt="song-cover" width={300} height={300} />
       </div>
       <div className="song-info">
         <h1 className="song-name text-white text-xl">{songName}</h1>
